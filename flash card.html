@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flashcard App</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="add-flashcard-con">
+            <button id="add-flashcard">Add Flashcard</button>
+        </div>
+
+        <!-- Display Card of Question And Answers Here -->
+        <div id="card-con">
+            <div class="card-list-container"></div>
+        </div>
+    </div>
+
+    <!-- Input form for users to fill question and answer -->
+    <div class="question-container hide" id="add-question-card">
+        <h2>Add Flashcard</h2>
+        <div class="wrapper">
+            <!-- Error message -->
+            <div class="error-con">
+                <span class="hide" id="error">Input fields cannot be empty!</span>
+            </div>
+            <!-- Close Button -->
+            <i class="fa-solid fa-xmark" id="close-btn"></i>
+        </div>
+
+        <label for="question">Question:</label>
+        <textarea class="input" id="question" placeholder="Type the question here..." rows="2"></textarea>
+        <label for="answer">Answer:</label>
+        <textarea class="input" id="answer" rows="4" placeholder="Type the answer here..."></textarea>
+        <button id="save-btn">Save</button>
+    </div>
+    <!-- Stylesheet -->
+
+<style>
+    * {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+body {
+  background-color: #f7f9fd;
+}
+.container {
+  width: 90vw;
+  max-width: 62.5em;
+  position: relative;
+  margin: auto;
+}
+.add-flashcard-con {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1.2em 1em;
+}
+button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+.add-flashcard-con button {
+  font-size: 1em;
+  background-color: #587ef4;
+  color: #ffffff;
+  padding: 0.8em 1.2em;
+  font-weight: 500;
+  border-radius: 0.4em;
+}
+#card-con {
+  margin-top: 1em;
+}
+.question-container {
+  width: 90vw;
+  max-width: 34em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #ffffff;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  padding: 3em 2em;
+  border-radius: 0.6em;
+  box-shadow: 0 1em 2em rgba(28, 0, 80, 0.1);
+}
+.question-container h2 {
+  font-size: 2.2em;
+  color: #363d55;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 2em;
+}
+.wrapper {
+  display: grid;
+  grid-template-columns: 11fr 1fr;
+  gap: 1em;
+  margin-bottom: 1em;
+}
+.error-con {
+  align-self: center;
+}
+#error {
+  color: #ff5353;
+  font-weight: 400;
+}
+.fa-xmark {
+  font-size: 1.4em;
+  background-color: #587ef4;
+  height: 1.8em;
+  width: 1.8em;
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  border-radius: 50%;
+  cursor: pointer;
+  justify-self: flex-end;
+}
+label {
+  color: #363d55;
+  font-weight: 600;
+  margin-bottom: 0.3em;
+}
+textarea {
+  width: 100%;
+  padding: 0.7em 0.5em;
+  border: 1px solid #d0d0d0;
+  outline: none;
+  color: #414a67;
+  border-radius: 0.3em;
+  resize: none;
+}
+textarea:not(:last-child) {
+  margin-bottom: 1.2em;
+}
+textarea:focus {
+  border-color: #363d55;
+}
+#save-btn {
+  font-size: 1em;
+  background-color: #587ef4;
+  color: #ffffff;
+  padding: 0.6em 0;
+  border-radius: 0.3em;
+  font-weight: 600;
+}
+.card-list-container {
+  display: grid;
+  padding: 0.2em;
+  gap: 1.5em;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.card {
+  background-color: #ffffff;
+  box-shadow: 0 0.4em 1.2em rgba(28, 0, 80, 0.08);
+  padding: 1.2em;
+  border-radius: 0.4em;
+}
+.question-div,
+.answer-div {
+  text-align: justify;
+}
+.question-div {
+  margin-bottom: 0.5em;
+  font-weight: 500;
+  color: #363d55;
+}
+.answer-div {
+  margin-top: 1em;
+  font-weight: 400;
+  color: #414a67;
+}
+.show-hide-btn {
+  display: block;
+  background-color: #587ef4;
+  color: #ffffff;
+  text-decoration: none;
+  text-align: center;
+  padding: 0.6em 0;
+  border-radius: 0.3em;
+}
+.buttons-con {
+  display: flex;
+  justify-content: flex-end;
+}
+.edit,
+.delete {
+  background-color: transparent;
+  padding: 0.5em;
+  font-size: 1.2em;
+}
+.edit {
+  color: #587ef4;
+}
+.delete {
+  color: #ff5353;
+}
+.hide {
+  display: none;
+}
+@media screen and (max-width: 800px) {
+  .card-list-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8em;
+  }
+}
+@media screen and (max-width: 450px) {
+  body {
+    font-size: 14px;
+  }
+  .card-list-container {
+    grid-template-columns: 1fr;
+    gap: 1.2em;
+  }
+}
+</style>
+    <!-- Script -->
+    <script>
+        const container = document.querySelector(".container");
+            const addQuestionCard = document.getElementById("add-question-card");
+            const cardButton = document.getElementById("save-btn");
+            const question = document.getElementById("question");
+            const answer = document.getElementById("answer");
+            const errorMessage = document.getElementById("error");
+            const addQuestion = document.getElementById("add-flashcard");
+            const closeBtn = document.getElementById("close-btn");
+            let editBool = false;
+
+            //Add question when user clicks 'Add Flashcard' button
+            addQuestion.addEventListener("click", () => {
+                container.classList.add("hide");
+                question.value = "";
+                answer.value = "";
+                addQuestionCard.classList.remove("hide");
+            });
+
+            //Hide Create flashcard Card
+            closeBtn.addEventListener(
+                "click",
+                (hideQuestion = () => {
+                    container.classList.remove("hide");
+                    addQuestionCard.classList.add("hide");
+                    if (editBool) {
+                        editBool = false;
+                        submitQuestion();
+                    }
+                })
+            );
+
+            //Submit Question
+            cardButton.addEventListener(
+                "click",
+                (submitQuestion = () => {
+                    editBool = false;
+                    tempQuestion = question.value.trim();
+                    tempAnswer = answer.value.trim();
+                    if (!tempQuestion || !tempAnswer) {
+                        errorMessage.classList.remove("hide");
+                    } else {
+                        container.classList.remove("hide");
+                        errorMessage.classList.add("hide");
+                        viewlist();
+                        question.value = "";
+                        answer.value = "";
+                    }
+                })
+            );
+
+            //Card Generate
+            function viewlist() {
+                var listCard = document.getElementsByClassName("card-list-container");
+                var div = document.createElement("div");
+                div.classList.add("card");
+                //Question
+                div.innerHTML += `
+  <p class="question-div">${question.value}</p>`;
+                //Answer
+                var displayAnswer = document.createElement("p");
+                displayAnswer.classList.add("answer-div", "hide");
+                displayAnswer.innerText = answer.value;
+
+                //Link to show/hide answer
+                var link = document.createElement("a");
+                link.setAttribute("href", "#");
+                link.setAttribute("class", "show-hide-btn");
+                link.innerHTML = "Show/Hide";
+                link.addEventListener("click", () => {
+                    displayAnswer.classList.toggle("hide");
+                });
+
+                div.appendChild(link);
+                div.appendChild(displayAnswer);
+
+                //Edit button
+                let buttonsCon = document.createElement("div");
+                buttonsCon.classList.add("buttons-con");
+                var editButton = document.createElement("button");
+                editButton.setAttribute("class", "edit");
+                editButton.innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
+                editButton.addEventListener("click", () => {
+                    editBool = true;
+                    modifyElement(editButton, true);
+                    addQuestionCard.classList.remove("hide");
+                });
+                buttonsCon.appendChild(editButton);
+                disableButtons(false);
+
+                //Delete Button
+                var deleteButton = document.createElement("button");
+                deleteButton.setAttribute("class", "delete");
+                deleteButton.innerHTML = `<i class="fa-solid fa-trash-can"></i>`;
+                deleteButton.addEventListener("click", () => {
+                    modifyElement(deleteButton);
+                });
+                buttonsCon.appendChild(deleteButton);
+
+                div.appendChild(buttonsCon);
+                listCard[0].appendChild(div);
+                hideQuestion();
+            }
+
+            //Modify Elements
+            const modifyElement = (element, edit = false) => {
+                let parentDiv = element.parentElement.parentElement;
+                let parentQuestion = parentDiv.querySelector(".question-div").innerText;
+                if (edit) {
+                    let parentAns = parentDiv.querySelector(".answer-div").innerText;
+                    answer.value = parentAns;
+                    question.value = parentQuestion;
+                    disableButtons(true);
+                }
+                parentDiv.remove();
+            };
+
+            //Disable edit and delete buttons
+            const disableButtons = (value) => {
+                let editButtons = document.getElementsByClassName("edit");
+                Array.from(editButtons).forEach((element) => {
+                    element.disabled = value;
+                });
+            };
+    </script>
+</body>
+
+</html>
