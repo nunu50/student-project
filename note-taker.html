@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://raw.githack.com/BartikaKumar/Popify/main/script.js"></script>
+
+    <title>Note Taker</title>
+</head>
+
+<body>
+    <!--HEADER -->
+    <h1>Note Taker</h1>
+    <!--NEW MOTE TEXT-->
+    <h3 class="new">Add A New Note:</h3>
+    <!--TEXT AREA-->
+    <div class="text_area">
+        <label for="ui">Note:</label>
+        <textarea name="ui" id="ui" class="ui" rows="4" cols="40"></textarea>
+    </div>
+    <!--ADD NOTE BTN-->
+    <div class="btn_cont">
+        <button class="btn" id="btn">Add Note</button>
+    </div>
+
+    <!--NOTE GRID-->
+    <div class="note_grid" id="note_grid">
+
+    </div>
+    <!--DIALOG BOX-->
+    <div class="dialog">
+        <div class="dialog_text">
+        </div>
+        <button class="close_dialog">Dismiss</button>
+    </div>
+    <!--END -->
+<style>
+    body {
+  margin:0;
+  padding:0;
+  background:linear-gradient(to right, #33a5df,   #433396);
+}
+h1 {
+  text-align:center;
+  text-shadow:3px 3px 7px #000;
+}
+h3, .btn_cont {
+  text-align:center;
+}
+.new{
+  color:#38d214;
+  text-shadow:0 3px 6px #000;
+}
+.ui {
+  padding:10px;
+  outline:none;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  position: relative;
+  left:50%;
+  transform:translateX(-50%);
+}
+.btn {
+  padding:8px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  border:none;
+  background:#3cc551;
+  margin:5px 0;
+  color:#fff;
+  font-weight:bolder;
+  cursor: pointer;
+  outline:none;
+}
+.note {
+  width:75%;
+  height:130px;
+  border:1px solid #000;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  padding:10px;
+  margin:10px auto;
+  background:#fff;
+  box-shadow:3px 5px 7px #000;
+  font-family:monospace;
+  font-weight:500;
+}
+.view {
+  background:#5891da;
+  color:#fff;
+  font-weight:bolder;
+  border:none;
+  padding:5px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  margin:10px 0;
+  outline: none;
+  cursor:pointer;
+}
+.note_grid {
+  display: grid;
+  grid-template-columns: repeat(2,160px);
+  
+}
+.text {
+  width:100%;
+  height: 50%;
+  overflow: hidden;
+  padding:5px 0;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  word-wrap:break-word;
+}
+.title {
+  font-weight:bolder;
+  font-size:.8rem;
+  margin:5px 0;
+}
+label {
+  margin:0 20px;
+  font-weight:bolder;
+  
+}
+.dialog {
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:250px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  height:120px;
+  border:1px solid #000;
+  padding:10px;
+  margin-left:-1000px;
+  background:rgb(28,29,41);
+  
+}
+.close_dialog {
+  position: absolute;
+  right:10px;
+  bottom:10px;
+  border:none;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  padding:5px;
+  color:#fff;
+  font-weight:bolder;
+  background: #ed1111d4;
+}
+.dialog_text {
+  width:90%;
+  height:75%;
+  border:1px solid #000;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background: #fff;
+  margin:0 auto;
+  padding:0 7px;
+  overflow-y: auto;
+}
+.show_note {
+  animation:slide_in .5s ease-in 1;
+  animation-fill-mode:forwards;
+}
+@keyframes slide_in {
+  from {margin-left:-1000px;}
+  to {margin-left:0;}
+}
+.dismiss_note {
+  animation:dismiss .5s ease-in 1;
+  animation-fill-mode:forwards;
+}
+@keyframes dismiss {
+  from {margin-left:0;}
+  to {margin-left:-1000px;}
+}
+.del {
+  padding:5px;
+  border:none;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  font-weight:bolder;
+  background:#b23838;
+  margin-left:5px;
+  color:#fff;
+  outline:none;
+}
+</style>
+<script>
+    window.onload = () => {
+            alertify({
+                title: "Made By NUHA",
+                text: "Simple Note Taker App"
+            })
+            let user_inpt = document.querySelector("#ui");
+            let btn = document.querySelector("#btn");
+            let note_grid = document.querySelector("#note_grid");
+            let dialog = document.querySelector(".dialog");
+            let dialog_text = document.querySelector(".dialog_text");
+            let close_dialog = document.querySelectorAll(".close_dialog");
+            let note_count = 1;
+
+
+            //UPDATING THE NOTE_GRID
+            function update_note(text) {
+                if (text.trim() != "") {
+                    createEl();
+                    addEvent();
+                    dismiss();
+                    del();
+                    index();
+                } else {
+                    return;
+                }
+            }
+
+            //ADD EVENTS TO ALL OUR VIEW MORE BUTTONS
+            //OPENING THE DIALOG
+            function addEvent() {
+                let view_note = document.querySelectorAll(".view");
+                view_note.forEach(view => {
+                    view.onclick = () => {
+                        dialog_text.innerText = view.previousElementSibling.innerHTML;
+                        //OPEN DIALOG BOX
+                        dialog.classList.remove("dismiss_note");
+                        dialog.classList.add("show_note");
+                        user_inpt.disabled = true;
+                    }
+                });
+            }
+
+            //CLOSE DIALOG
+            function dismiss() {
+                close_dialog.forEach(close => {
+                    close.onclick = () => {
+                        dialog.classList.add("dismiss_note");
+                        dialog.classList.remove("show_note");
+                        user_inpt.disabled = false;
+
+                    };
+                });
+            }
+            //DELETING FROM LIST
+            function del() {
+                index();
+                let remove = document.querySelectorAll(".del");
+                remove.forEach(x => {
+                    x.onclick = () => {
+                        x.parentNode.parentNode.removeChild(x.parentNode);
+                    };
+                });
+            }
+
+            //KINDA ROGUE BUT DOES THE JOB
+            function index() {
+                let arr = document.querySelectorAll(".title");
+                arr.forEach(x => {
+                    x.innerHTML = `Note ${note_count}`;
+                    note_count++;
+                });
+                note_count = 0;
+            }
+            //CREATING THE NOTE GRID
+            function createEl() {
+                index();
+                let div = document.createElement("div");
+                div.className = "note";
+                div.innerHTML = `     <div class="title">Note ${note_count} </div>
+    <div class="text">
+    ${user_inpt.value}
+    </div>
+    <button class="view">View Note</button>
+    <button class="del">Delete</button>`;
+                note_grid.appendChild(div);
+                user_inpt.value = "";
+
+            }
+
+            //MAIN FUNC
+            btn.onclick = () => update_note(user_inpt.value);
+
+        };
+</script>
+</body>
+
+</html>
